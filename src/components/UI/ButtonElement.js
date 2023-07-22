@@ -1,10 +1,10 @@
-import { Button } from '@mui/material'
-import React from 'react'
+import { Button } from '@mui/material';
+import React from 'react';
 
-export const ButtonElement = ({ buttonText, ...props }) => {
+export const ButtonElement = ({ buttonText = "Button text", color = 'primary', ...props }) => {
   return (
-    <Button {...props}>
+    <Button color={color} {...props}>
       {buttonText}
     </Button>
-  )
-}
+  );
+};
