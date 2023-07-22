@@ -1,4 +1,3 @@
-import * as React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
@@ -12,9 +11,34 @@ import { ButtonElement } from '../../components/UI/ButtonElement';
 import { LinkElement } from '../../components/UI/LinkElement';
 import { ImageComponent } from '../../components/UI/Image';
 import loginSvg from '../../assets/images/login.svg';
+import { useState } from 'react';
+import { Password } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { login } from '../../store/slices/authReducer';
 
 const Login = (props) => {
+    const dispatch = useDispatch();
     const isMobileView = useMobileView(); // Using the custom hook here
+    const [userName, setUserName] = useState("kminchelle")
+    const [password, setPassword] = useState("0lelplR")
+
+    const handleUsernameChange = (e) => {
+        setUserName(e.target.value)
+    }
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value)
+    }
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const loginDetails = {
+            userName: userName,
+            password: password,
+            // expiresInMins: 60, // optional
+        }
+        dispatch(login(loginDetails))
+
+    }
+
     return (
         <CardContainer
             cardStyles={{
@@ -41,6 +65,8 @@ const Login = (props) => {
                     autoFocus
                     required
                     fullWidth
+                    value={userName}
+                    onChange={handleUsernameChange}
                 />
                 <TextBoxElement
                     margin="normal"
@@ -49,9 +75,11 @@ const Login = (props) => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    inputAdornmentIcon={<LockOutlinedIcon />}
                     required
                     fullWidth
-                    inputAdornmentIcon={<LockOutlinedIcon />}
+                    value={password}
+                    onChange={handlePasswordChange}
                 />
                 <Grid container>
                     <Grid item xs>
@@ -71,6 +99,7 @@ const Login = (props) => {
                     sx={{ mt: 3, mb: 2 }}
                     buttonText="Log in"
                     color="secondary"
+                    onClick={handleLogin}
                 />
 
                 Or

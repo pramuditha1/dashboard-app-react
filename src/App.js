@@ -3,11 +3,15 @@ import './App.css';
 import Login from './containers/Login';
 import MainHeader from './containers/MainHeader';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Switch } from '@mui/material';
+import { Box } from '@mui/material';
 import { ButtonElement } from './components/UI/ButtonElement';
+import { useSelector } from 'react-redux';
+import { getAuthToken } from './utils/helper';
+import { Dashboard } from './containers/Dashboard';
 
-function App() {
+export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
   const defaultTheme = createTheme();
   const darkTheme = createTheme({
     palette: {
@@ -19,21 +23,28 @@ function App() {
     setIsDarkMode((prevMode) => !prevMode);
   };
 
+  // Retrieve the token from the cookie
+  const token = getAuthToken();
+  const isValidUser = isLoggedIn && token
+  console.log(isLoggedIn, "==== isLoggedIn");
+  console.log(token, "==== token");
+  console.log(isValidUser, "==== isValidUser");
+
   return (
-    <>
       <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
-        <MainHeader isDarkMode={isDarkMode}/>
-        <Box component="div" 
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%', // Set width to 100% to cover the whole page horizontally
-          height: '100vh', // Set height to 100vh to cover the whole page vertically
-          backgroundColor: !isDarkMode ? '#E4E4E4' : '#000',
-        }}
+        <MainHeader isDarkMode={isDarkMode} />
+        <Box component="div"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%', // Set width to 100% to cover the whole page horizontally
+            height: '100vh', // Set height to 100vh to cover the whole page vertically
+            backgroundColor: !isDarkMode ? '#E4E4E4' : '#000',
+          }}
         >
-          <Login />
-          <Box
+          {!token && <Login />}
+          {token && <Dashboard />}
+          {/* <Box
             sx={{
               position: 'absolute',
               bottom: '20px',
@@ -41,27 +52,18 @@ function App() {
               transform: 'translateX(-50%)', // Use transform to adjust centering
             }}
           >
-             {/* <ButtonElement
-                    fullWidth
-                    variant="outlined"
-                    sx={{ mt: 3, mb: 2 }}
-                    buttonText="Dark Mode"
-                    color="#fff"
-                /> */}
-                 <ButtonElement
-                    type="button"
-                    fullWidth
-                    variant="outlined"
-                    sx={{ mt: 3, mb: 2 }}
-                    buttonText="Dark mode"
-                    color='secondary'
-                    onClick={handleThemeToggle}
-                />
-          </Box>
+            <ButtonElement
+              type="button"
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 3, mb: 2 }}
+              buttonText={isDarkMode ? "Light Mode" : "Dark Mode"}
+              color='secondary'
+              onClick={handleThemeToggle}
+            />
+          </Box> */}
         </Box>
-        
       </ThemeProvider>
-    </>
   );
 }
 
