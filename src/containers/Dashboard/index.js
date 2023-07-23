@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 * @function Dashboard
 **/
 
-export const Dashboard = (props) => {
+const Dashboard = (props) => {
     const user = useSelector((state) => state.userInfo)
 
   return(
@@ -14,3 +14,5 @@ export const Dashboard = (props) => {
    )
 
  }
+
+ export default Dashboard

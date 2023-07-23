@@ -11,7 +11,8 @@ const initialState = {
 export const login = createAsyncThunk(
     'auth/login',
     async (loginDetails) => {
-        const response = await axios.post('https://dummyjson.com/auth/login',
+        let authData = {}
+        await axios.post('https://dummyjson.com/auth/login',
             {
                 username: loginDetails.userName,
                 password: loginDetails.password,
@@ -20,22 +21,26 @@ export const login = createAsyncThunk(
                 headers: {
                     'Content-Type': 'application/json',
                 },
+            }).then((data) => {
+                // Store the token in a secure cookie
+                const loginData = data.data
+                if (loginData.token) {
+                    Cookies.set('token', loginData.token, { secure: true, sameSite: 'strict' });
+                    authData = {
+                        isLoggedIn: loginData.token ? true : false,
+                        email: loginData.email,
+                        id: loginData.id,
+                        firstName: loginData.firstName,
+                        lastName: loginData.lastName,
+                        username: loginData.username,
+                    }
+                }
+            }).catch((err) => {
+                Cookies.remove('token')
+                authData = {
+                    error: err.message
+                }
             });
-
-        const authData = {
-            isLoggedIn: response.data.token ? true : false,
-            email: response.data.email,
-            id: response.data.id,
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            username: response.data.username,
-        }
-
-        // Store the token in a secure cookie
-        if (response.data.token) {
-            Cookies.set('token', response.data.token, { secure: true, sameSite: 'strict' });
-        }
-
         return authData;
     }
 );
@@ -50,8 +55,15 @@ const authDetailsSlice = createSlice({
                 state.loading = true;
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.data = action.payload;
-                state.loading = false;
+                if (!action.payload.error) {
+                    state.data = action.payload;
+                    state.loading = false;
+                    state.error = "";
+                } else {
+                    state.data = {};
+                    state.loading = false;
+                    state.error = action.payload.error;
+                }
             })
             .addCase(login.rejected, (state) => {
                 state.loading = false;

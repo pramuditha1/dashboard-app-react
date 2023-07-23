@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import './App.css';
-import Login from './containers/Login';
 import MainHeader from './containers/MainHeader';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { ButtonElement } from './components/UI/ButtonElement';
 import { useSelector } from 'react-redux';
 import { getAuthToken } from './utils/helper';
-import { Dashboard } from './containers/Dashboard';
 import { MainContent } from './containers/MainContent';
 import { ThemeToggleButton } from './components/ThemeToggleButton';
+
+import Login from './containers/Login';
+import Dashboard from './containers/Dashboard';
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 
 export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -32,7 +36,19 @@ export const App = () => {
     <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
       <MainHeader isDarkMode={isDarkMode} />
       <MainContent isDarkMode={isDarkMode}>
-        <Login />
+      <Router>
+          <Routes>
+            {/* If the user is logged in (token exists), render Dashboard */}
+            {token ? (
+              <Route path="/dashboard" element={<Dashboard />} />
+            ) : (
+              // If not logged in, redirect to the Login page
+              <Route path="/" element={<Navigate to="/login" />} />
+            )}
+            {/* Common Login route */}
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Router>
       </MainContent>
       <ThemeToggleButton isDarkMode={isDarkMode} handleThemeToggle={handleThemeToggle} />
     </ThemeProvider>
