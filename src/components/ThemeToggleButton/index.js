@@ -2,12 +2,7 @@ import React from 'react'
 import { ButtonElement } from '../UI/ButtonElement'
 import { Box } from '@mui/material'
 
-/**
-* @author
-* @function ThemeToggleButton
-**/
-
-export const ThemeToggleButton = (props) => {
+const ThemeToggleButton = (props) => {
   return(
     <Box
             sx={{
@@ -28,5 +23,6 @@ export const ThemeToggleButton = (props) => {
             />
           </Box>
    )
-
  }
+
+ export default ThemeToggleButton

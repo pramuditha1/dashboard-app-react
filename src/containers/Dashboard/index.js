@@ -1,13 +1,10 @@
-import React from 'react'
+import { get } from 'lodash'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-/**
-* @author
-* @function Dashboard
-**/
-
 const Dashboard = (props) => {
-    const user = useSelector((state) => state.userInfo)
+  //   const userLoginDetails = useSelector((state) => state.userInfo.data)
+  //   const isLoggedIn = get(userLoginDetails, "isLoggedIn")
 
   return(
     <div>Dashboard</div>
