@@ -1,115 +1,72 @@
-import { get } from "lodash";
-import React, { useEffect, PureComponent } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getChartData } from "../../store/slices/chartDataReducer";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-import { CardContainer } from "../../components/UI/Card";
-import { Box } from "@mui/system";
-import { Typography } from "@mui/material";
+    fetchChartData,
+    selectChartDataError,
+    selectChartDataItems,
+    selectChartDataLoading
+}
+    from "../../store/slices/chartDataReducer";
+import { Grid } from "@mui/material";
 import useMobileView from "../../utils/helper";
+import LineChartComponent from "../../components/LineChartComponent";
+
+import Box from '@mui/material/Box';
+import WelcomeDashboardComponent from "../../components/WelcomeDashboardComponent";
 
 const Dashboard = (props) => {
-  const dispatch = useDispatch();
-  const isMobileView = useMobileView(); // Using the custom hook here
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+    const dispatch = useDispatch();
+    const isMobileView = useMobileView(); // Using the custom hook here
 
-  // useEffect(() => {
-  //    dispatch(getChartData())
-  // }, [])
+    useEffect(() => {
+        dispatch(fetchChartData({ startDate: "2023-05-20", endDate: "2023-06-08" }));
+    }, [dispatch]);
 
-  return (
-    <CardContainer
-      cardStyles={{
-        width: "100%",
-        maxWidth: "500px",
-        marginTop: "30px",
-        height: "200px",
-      }}
-      cardContentStyles={{
-        padding: !isMobileView ? "1rem" : "0",
-        display: "flex",
-        flexDirection: isMobileView ? "column" : "row",
-        alignItems: "center",
-        width: "100%",
-        height: "200px",
-      }}
-    >
-      
-      <Box
-        component="div"
-        noValidate
-        sx={{
-          mt: 1,
-          width: isMobileView ? "100%" : "50%", // Set 100% width in mobile view, 70% in web view
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Typography variant="h6">High</Typography>
-        <Typography variant="h4">2659</Typography>
-        <Typography variant="body1">1.10% since yesterday</Typography>
-      </Box>
+    const loading = useSelector(selectChartDataLoading);
+    const error = useSelector(selectChartDataError);
+    const chartData = useSelector(selectChartDataItems);
+    const lineChartSinceYesterday = "1.10% since yesterday"
+    const chartType = "basis"
 
-      {/* Right Section */}
-      <ResponsiveContainer width="45%" height="50%">
-        <LineChart width={300} height={100} data={data}>
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
-    </CardContainer>
-  );
+    return (
+        <>
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                        <WelcomeDashboardComponent title="Welcome to your dashboard!"
+                            subTitle="Try our new Admin Dashboard Template, build with live Ant-Design components. Customize it to your needs and release to production!"
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        xs=4
+                    </Grid>
+                    {/* line charts */}
+                    <Grid item xs={4}>
+                        <LineChartComponent title="High" value="2659" sinceYesterday={lineChartSinceYesterday}
+                            chartData={chartData} chartType={chartType} chartColor="#ed8f2b" dataKey={"h"}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <LineChartComponent title="Low" value="2659" sinceYesterday={lineChartSinceYesterday}
+                            chartData={chartData} chartType={chartType} chartColor="#ebc923" dataKey={"l"}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <LineChartComponent title="Open" value="2659" sinceYesterday={lineChartSinceYesterday}
+                            chartData={chartData} chartType={chartType} chartColor="#5dc972" dataKey={"o"}
+                        />
+                    </Grid>
+                    <Grid item xs={8}>
+                        xs=8
+                    </Grid>
+                    <Grid item xs={4}>
+                        xs=4
+                    </Grid>
+                </Grid>
+            </Box>
+        </>
+
+    );
 };
 
 export default Dashboard;

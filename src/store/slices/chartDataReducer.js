@@ -1,52 +1,65 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { restClient} from "@polygon.io/client-js";
-// import { PROD_ENV } from "../../utils/constants";
 
 const initialState = {
     data: [],
     loading: false,
+    error: null,
 };
 
-const rest = restClient("oqwsl9C0odCpad3e108FfNm79IgukZia");
+export const fetchChartData = createAsyncThunk(
+    'chartData/fetch',
+    async (dateRange) => {
+        const apiKey = 'oqwsl9C0odCpad3e108FfNm79IgukZia';
+        const { startDate, endDate } = dateRange;
 
-export const getChartData = createAsyncThunk(
-    'chart/getData',
-    async () => {
-        await rest.stocks.aggregates("AAPL", 1, "day", "2023-04-14", "2023-04-14").then((data) => {
-            console.log("====", data);
-        }).catch(e => {
-            console.error('==== An error happened:', e);
-        });
-        // return authData;
+        try {
+            const response = await axios.get(`https://api.polygon.io/v2/aggs/ticker/NVDA/range/1/day/${startDate}/${endDate}?apiKey=${apiKey}`);
+            return response.data.results;
+        } catch (error) {
+            throw new Error('Failed to fetch chart data.');
+        }
     }
 );
 
-// const authDetailsSlice = createSlice({
-//     name: 'userInfo',
-//     initialState,
-//     reducers: {},
-//     extraReducers: (builder) => {
-//         builder
-//             .addCase(login.pending, (state) => {
-//                 state.loading = true;
-//             })
-//             .addCase(login.fulfilled, (state, action) => {
-//                 if (!action.payload.error) {
-//                     state.data = action.payload;
-//                     state.loading = false;
-//                     state.error = "";
-//                 } else {
-//                     state.data = {};
-//                     state.loading = false;
-//                     state.error = action.payload.error;
-//                 }
-//             })
-//             .addCase(login.rejected, (state) => {
-//                 state.loading = false;
-//             })
-//     },
-// });
+const chartDataSlice = createSlice({
+    name: 'chartData',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchChartData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchChartData.fulfilled, (state, action) => {
+                state.data = action.payload;
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(fetchChartData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+    },
+});
 
-// export default authDetailsSlice.reducer;
+export default chartDataSlice.reducer;
+
+// Selector function using @reduxjs/toolkit's createSelector
+const selectChartData = (state) => state.chartData;
+
+export const selectChartDataLoading = createSelector(
+  selectChartData,
+  (chartData) => chartData.loading
+);
+
+export const selectChartDataError = createSelector(
+  selectChartData,
+  (chartData) => chartData.error
+);
+
+export const selectChartDataItems = createSelector(
+  selectChartData,
+  (chartData) => chartData.data
+);
