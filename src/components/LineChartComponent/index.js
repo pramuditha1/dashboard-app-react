@@ -5,15 +5,15 @@ import { Line, LineChart, ResponsiveContainer } from 'recharts'
 import useMobileView from '../../utils/helper'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
+/*
+reusable line chart component
+recharts library used
+*/
 const LineChartComponent = (props) => {
-    const isMobileView = useMobileView(); // Using the custom hook here
+    const isMobileView = useMobileView();
     return (
         <CardContainer
-            cardStyles={{
-                width: "100%",
-                maxWidth: "300px",
-                marginTop: "30px",
-            }}
+            cardStyles={{}}
             cardContentStyles={{
                 padding: !isMobileView ? "1rem" : "0",
                 display: "flex",
@@ -38,8 +38,6 @@ const LineChartComponent = (props) => {
                 <Typography variant="h4">{props.value}</Typography>
                 <Typography variant="body1" fontSize={11}><ArrowUpwardIcon fontSize='smaller' sx={{color:'#5dc972'}}/>{props.sinceYesterday}</Typography>
             </Box>
-
-            {/* Right Section */}
             <ResponsiveContainer width="45%" height="50%">
                 <LineChart width={300} height={100} data={props.chartData}>
                     <Line type={props.chartType} dataKey={props.dataKey} stroke={props.chartColor} strokeWidth={2} />

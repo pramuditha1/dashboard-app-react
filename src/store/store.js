@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // or "redux-persist/lib/sessionStorage" for session storage
+import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import authReducer from "./slices/authReducer";
 import chartDataReducer from "./slices/chartDataReducer";
@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: "root", // Change this to a unique key for your app
+  key: "root",
   storage,
 };
 

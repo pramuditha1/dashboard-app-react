@@ -7,6 +7,7 @@ const initialState = {
     error: null,
 };
 
+//fetch line chart data from plygon api 
 export const fetchChartData = createAsyncThunk(
     'chartData/fetch',
     async (dateRange) => {
@@ -22,6 +23,7 @@ export const fetchChartData = createAsyncThunk(
     }
 );
 
+//chart data reducer slice
 const chartDataSlice = createSlice({
     name: 'chartData',
     initialState,
@@ -46,9 +48,10 @@ const chartDataSlice = createSlice({
 
 export default chartDataSlice.reducer;
 
-// Selector function using @reduxjs/toolkit's createSelector
+//chart data domain selected from redux store
 const selectChartData = (state) => state.chartData;
 
+//line chart selectors. can use everywhere
 export const selectChartDataLoading = createSelector(
   selectChartData,
   (chartData) => chartData.loading

@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
-// import { PROD_ENV } from "../../utils/constants";
 
 const initialState = {
     data: [],
     loading: false,
 };
 
+//login async action
 export const login = createAsyncThunk(
     'auth/login',
     async (loginDetails) => {
@@ -45,6 +45,7 @@ export const login = createAsyncThunk(
     }
 );
 
+//login redux store reducer slice
 const authDetailsSlice = createSlice({
     name: 'userInfo',
     initialState,

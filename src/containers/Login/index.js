@@ -11,7 +11,7 @@ import { ButtonElement } from '../../components/UI/ButtonElement';
 import { LinkElement } from '../../components/UI/LinkElement';
 import { ImageComponent } from '../../components/UI/Image';
 import loginSvg from '../../assets/images/login.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/slices/authReducer';
 import { useNavigate } from 'react-router-dom';
@@ -21,19 +21,11 @@ const Login = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isMobileView = useMobileView(); // Using the custom hook here
-    const userLoginDetails = useSelector((state) => state.userInfo.data)
-    const isLoggedIn = get(userLoginDetails, "isLoggedIn")
-    // useEffect(() => {
-    //     if (isLoggedIn) {
-    //         navigate('/dashboard');
-    //     } else {
-    //         navigate('/')
-    //     }
-    // }, [])
-
     const [userName, setUserName] = useState("kminchelle")
     const [password, setPassword] = useState("0lelplR")
 
+    const userLoginDetails = useSelector((state) => state.userInfo.data)
+    const isLoggedIn = get(userLoginDetails, "isLoggedIn")
 
     const handleUsernameChange = (e) => {
         setUserName(e.target.value)
@@ -41,6 +33,7 @@ const Login = (props) => {
     const handlePasswordChange = (e) => {
         setPassword(e.target.value)
     }
+    //login handler
     const handleLogin = (e) => {
         e.preventDefault();
         const loginDetails = {
@@ -59,10 +52,11 @@ const Login = (props) => {
 
     return (
         <CardContainer
+            showCard={true}
             cardStyles={{
                 width: '100%',
                 maxWidth: '500px',
-                marginTop: '30px'
+                marginTop: '30px',
             }}
             cardContentStyles={{
                 padding: !isMobileView ? '1rem' : '0',
