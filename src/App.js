@@ -21,9 +21,11 @@ import Settings from "./containers/Settings";
 import Chat from "./containers/Chat";
 import FAQ from "./containers/Faq";
 import { COLORS } from './utils/Constants';
+import useMobileView from './utils/helper';
 
 const App = (props) => {
   const loggedUserDetails = useSelector((state) => state.userInfo.data);
+  const isMobileView = useMobileView();
   const isLoggedIn = get(loggedUserDetails, "isLoggedIn");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const defaultTheme = createTheme();
@@ -37,6 +39,7 @@ const App = (props) => {
     setIsDarkMode((prevMode) => !prevMode);
   };
 
+  console.log(isMobileView, "====== mobile view");
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
       <CssBaseline />
