@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import axios from "axios";
+import { get } from "lodash";
 
 const initialState = {
     data: [],
@@ -7,7 +8,7 @@ const initialState = {
     error: null,
 };
 
-//fetch line chart data from plygon api 
+//fetch chart data from plygon api 
 export const fetchChartData = createAsyncThunk(
     'chartData/fetch',
     async (dateRange) => {
@@ -51,18 +52,48 @@ export default chartDataSlice.reducer;
 //chart data domain selected from redux store
 const selectChartData = (state) => state.chartData;
 
-//line chart selectors. can use everywhere
+//chart selectors. can use in any component/ container
 export const selectChartDataLoading = createSelector(
-  selectChartData,
-  (chartData) => chartData.loading
+    selectChartData,
+    (chartData) => chartData.loading
 );
 
 export const selectChartDataError = createSelector(
-  selectChartData,
-  (chartData) => chartData.error
+    selectChartData,
+    (chartData) => chartData.error
 );
 
+//chart details selector
 export const selectChartDataItems = createSelector(
-  selectChartData,
-  (chartData) => chartData.data
+    selectChartData,
+    (chartData) => chartData.data
 );
+
+//select open, high and low values
+export const selectOpenHighValues = createSelector(
+    selectChartData,
+    (chartData) => {
+        const highValues = [];
+        const lowValues = [];
+        const openValues = [];
+        chartData.data.map(stockData => {
+            highValues.push(get(stockData, 'h'))
+            lowValues.push(get(stockData, 'l'))
+            openValues.push(get(stockData, 'o'))
+        })
+
+        // Sort the array in descending order, Select the top five values using array slicing
+        const sortedData = highValues.sort((a, b) => b - a);
+        const topFiveValues = sortedData.slice(0, 5);
+
+        return {
+            highValues: highValues,
+            lowValues: lowValues,
+            openValues: openValues,
+            topFiveHighValues: topFiveValues,
+            maxHigh: Math.max(...highValues),
+            maxLow: Math.max(...lowValues),
+            maxOpen: Math.max(...openValues),
+        }
+    }
+)

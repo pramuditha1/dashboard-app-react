@@ -1,15 +1,21 @@
 import React from 'react'
 import { CardContainer } from '../UI/Card'
 import { Box, Typography } from '@mui/material'
-import { Line, LineChart, ResponsiveContainer } from 'recharts'
 import useMobileView from '../../utils/helper'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { LineChart } from '@mui/x-charts/LineChart';
 
 /*
 reusable line chart component
-recharts library used
+mui x-charts library used
 */
 const LineChartComponent = (props) => {
+    const chartData = [
+        {
+            data: props.lineChartData,
+            color: props.lineChartColor,
+        }
+    ]
     const isMobileView = useMobileView();
     return (
         <CardContainer
@@ -23,7 +29,6 @@ const LineChartComponent = (props) => {
                 height: "130px",
             }}
         >
-
             <Box
                 component="div"
                 noValidate
@@ -36,13 +41,15 @@ const LineChartComponent = (props) => {
             >
                 <Typography variant="h5">{props.title}</Typography>
                 <Typography variant="h4">{props.value}</Typography>
-                <Typography variant="body1" fontSize={11}><ArrowUpwardIcon fontSize='smaller' sx={{color:'#5dc972'}}/>{props.sinceYesterday}</Typography>
+                <Typography variant="body1" fontSize={11}><ArrowUpwardIcon fontSize='smaller' sx={{ color: '#5dc972' }} />{props.sinceYesterday}</Typography>
             </Box>
-            <ResponsiveContainer width="45%" height="50%">
-                <LineChart width={300} height={100} data={props.chartData}>
-                    <Line type={props.chartType} dataKey={props.dataKey} stroke={props.chartColor} strokeWidth={2} />
-                </LineChart>
-            </ResponsiveContainer>
+            <LineChart
+                leftAxis={null}
+                bottomAxis={null}
+                series={chartData}
+                width={500}
+                height={300}
+            />
         </CardContainer>
     )
 }
