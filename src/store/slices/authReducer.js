@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -73,3 +73,12 @@ const authDetailsSlice = createSlice({
 });
 
 export default authDetailsSlice.reducer;
+
+//auth details domain selected from redux store
+const selectAuthDetails = (state) => state.userInfo;
+
+//auth details selector
+export const selectUserDetails = createSelector(
+    selectAuthDetails,
+    (userData) => userData.data
+);
