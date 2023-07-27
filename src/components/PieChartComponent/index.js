@@ -15,8 +15,6 @@ const PieChartComponent = (props) => {
     { name: "B1", value: 200, fill: "#b88aed" },
   ];
 
-  const pieChartHeight = isMobileView ? 150 : 300;
-
   return (
     <CardContainer
       cardStyles={props.cardStyles}
@@ -50,8 +48,8 @@ const PieChartComponent = (props) => {
       >
         <PieChart
           width={isMobileView ? 200 : 300}
-          height={pieChartHeight}
-          margin={{ top: 0 }} // Adjust the margins
+          height={isMobileView ? 200 : 300}
+          margin={{ top: isMobileView ? 30 : 0 }} // Adjust the margins
           padding={{ left: 0 }} // Adjust the padding
         >
           <Pie

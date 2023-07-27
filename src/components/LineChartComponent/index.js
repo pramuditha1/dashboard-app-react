@@ -28,7 +28,8 @@ const LineChartComponent = (props) => {
         noValidate
         sx={{
           mt: 1,
-          width: "50%", // Set 100% width in mobile view, 70% in web view
+          pl: isMobileView ? 1 : 0,
+          width: isMobileView ? "30%" : "50%",
           display: "flex",
           flexDirection: "column",
         }}

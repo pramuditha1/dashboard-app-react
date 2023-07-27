@@ -25,3 +25,12 @@ export const COLORS = {
     UP_ARROW_GREEN: "#5dc972",
     BLACK: "#000000"
 }
+
+export const MENU = {
+    DASHBOARD: "Dashboard",
+    ORDERS: "Orders",
+    ACCOUNT: "Account",
+    SETTINGS: "Settings",
+    CHAT: "Chat",
+    FAQ: "FAQ",
+}

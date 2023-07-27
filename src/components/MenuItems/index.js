@@ -8,8 +8,14 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
+import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ChatIcon from '@mui/icons-material/Chat';
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import { MENU } from "../../utils/Constants";
 
 /*
 MenuItems component. this is used in both mobile(header mobile) and desktop views(in leftnav)
@@ -18,11 +24,15 @@ const MenuItems = (props) => {
   return (
     <>
       <List>
-        {["Dashboard", "Orders", "Account", "Settings"].map((text, index) => (
+        {[MENU.DASHBOARD, MENU.ORDERS, MENU.ACCOUNT, MENU.SETTINGS].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton component={Link} to={`/${text.toLowerCase()}`}>
+            <ListItemButton component={Link} to={`/${text.toLowerCase()}`} onClick={props.handleDrawer}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {text === MENU.DASHBOARD ? <StackedBarChartIcon /> 
+                : text === MENU.ORDERS ? <ShoppingCartIcon/> 
+                : text === MENU.ACCOUNT ? <PersonIcon/> 
+                : text === MENU.SETTINGS ? <SettingsIcon/> 
+                : null}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -34,11 +44,13 @@ const MenuItems = (props) => {
         Support
       </Typography>
       <List>
-        {["Chat", "FAQ"].map((text, index) => (
+        {[MENU.CHAT, MENU.FAQ].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton component={Link} to={`/${text.toLowerCase()}`}>
+            <ListItemButton component={Link} to={`/${text.toLowerCase()}`} onClick={props.handleDrawer}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {text === MENU.CHAT ? <ChatIcon /> 
+                : text === MENU.FAQ ? <LiveHelpIcon/>
+                : null}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>

@@ -18,7 +18,7 @@ const BarChartComponent = (props) => {
     >
       <Typography
         variant="h5"
-        style={{ textAlign: "left", marginBottom: "1rem" }}
+        style={{ textAlign: "left" }}
       >
         {props.title}
       </Typography>
@@ -34,7 +34,7 @@ const BarChartComponent = (props) => {
         series={props?.chartData}
         width={props?.width}
         height={props?.height}
-        margin={{ top: 0, right: -100, bottom: 0, left: -100 }} // Adjust the margins
+        margin= {{ top: 0, right: 0, bottom: 0, left: 0 }} // Adjust the margins
         padding={{ left: 0 }} // Adjust the padding
       />
     </CardContainer>

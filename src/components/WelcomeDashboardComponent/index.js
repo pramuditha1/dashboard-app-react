@@ -17,7 +17,7 @@ const WelcomeDashboardComponent = (props) => {
         noValidate
         sx={{
           mt: 1,
-          width: "45%",
+          width: { xs: "90%", sm: "45%" },
           display: "flex",
           flexDirection: "column",
         }}
@@ -32,16 +32,19 @@ const WelcomeDashboardComponent = (props) => {
         noValidate
         sx={{
           mt: 1,
-          width: "55%",
+          width: { xs: "90%", sm: "55%" },
           display: "flex",
           flexDirection: "column",
         }}
       >
         <ImageComponent
-          width="90%"
           link={welcomeDashboard}
           type="img"
-          styles={{ paddingLeft: "20px", width: "90%", height: "190px" }}
+          styles={{
+            paddingLeft: { xs: "0px", sm: "20px" },
+            width: { xs: "auto", sm: "90%" },
+            height: "190px",
+          }}
         />
       </Box>
     </CardContainer>

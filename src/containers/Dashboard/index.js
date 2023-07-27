@@ -68,6 +68,7 @@ const Dashboard = (props) => {
     backgroundColor: theme.palette.mode === "dark" ? COLORS.DASHBOARD_GRID_ITEM_DARK : COLORS.DASHBOARD_GRID_ITEM_LIGHT,
     ...theme.typography.body1,
     padding: theme.spacing(0.5),
+    margin: isMobileView ? theme.spacing(1) : theme.spacing(0),
     textAlign: "left",
     color: theme.palette.text.primary,
   }));
@@ -75,10 +76,10 @@ const Dashboard = (props) => {
   const cardContentStylesLineCharts = {
     padding: !isMobileView ? "1rem" : "0",
     display: "flex",
-    flexDirection: isMobileView ? "column" : "row",
+    flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    height: "130px",
+    height: isMobileView ? "200px" : "130px",
   };
 
   if (isEmpty(chartData))
@@ -90,6 +91,10 @@ const Dashboard = (props) => {
       <Grid container spacing={2} 
       sx={{ backgroundColor: props.isDarkMode ? COLORS.BLACK : COLORS.MAIN_CONTENT_BACKGROUND }}
       >
+        {/* 
+          for xs devices grid items will be alligned colomn wise,
+          for md screens grid items items lay on normal way
+         */}
         <Grid item xs={12} md={8}>
           <Item sx={{backgroundColor: COLORS.WELCOME_BANNER}}>
             <WelcomeDashboardComponent
@@ -104,7 +109,7 @@ const Dashboard = (props) => {
                 flexDirection: isMobileView ? "column" : "row",
                 alignItems: "center",
                 width: "100%",
-                height: "200px",
+                height: isMobileView ? "300px" : "200px",
               }}
             />
           </Item>
@@ -121,9 +126,8 @@ const Dashboard = (props) => {
                 padding: !isMobileView ? "1rem" : "0",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
                 width: "100%",
-                height: `200px`,
+                height: isMobileView ? "220px" : "200px",
               }}
             />
           </Item>
