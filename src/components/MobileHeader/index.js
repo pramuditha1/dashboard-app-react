@@ -90,7 +90,7 @@ const MobileHeader = (props) => {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "white",
+            backgroundColor: isDarkMode ? COLORS.BLACK : COLORS.WHITE,
             zIndex: 9999,
           }}
         >

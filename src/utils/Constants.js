@@ -23,7 +23,8 @@ export const COLORS = {
     HEADER_USER_DETAILS_LIGHT: "#5b5a5c",
     HEADER_USER_DETAILS_DARK: "#525250",
     UP_ARROW_GREEN: "#5dc972",
-    BLACK: "#000000"
+    BLACK: "#000000",
+    WHITE: "#ffffff",
 }
 
 export const MENU = {

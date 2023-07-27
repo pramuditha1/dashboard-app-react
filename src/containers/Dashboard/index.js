@@ -27,15 +27,30 @@ import {
 } from "../../utils/Constants";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import PieChartComponent from "../../components/PieChartComponent";
+import ThemeToggleButton from "../../components/ThemeToggleButton";
+import moment from "moment";
 
 const Dashboard = (props) => {
   const dispatch = useDispatch();
   const isMobileView = useMobileView();
 
+  const getOneMonthBeforeToday = () => {
+    const currentDate = moment();
+    const oneMonthAgo = currentDate.clone().subtract(1, 'month');
+  
+    return {
+      currentDate: currentDate.format('YYYY-MM-DD'),
+      oneMonthAgo: oneMonthAgo.format('YYYY-MM-DD'),
+    };
+  }
+
+  const { currentDate, oneMonthAgo } = getOneMonthBeforeToday();
+
   // on page load dispatch action to get chart data
   useEffect(() => {
+
     dispatch(
-      fetchChartData({ startDate: "2023-06-26", endDate: "2023-07-26" })
+      fetchChartData({ startDate: oneMonthAgo, endDate: currentDate })
     );
   }, [dispatch]);
 
@@ -48,24 +63,27 @@ const Dashboard = (props) => {
   const barChartItemsTopFive = [
     {
       data: get(chartDetails, "topFiveHighValues"),
-      color: COLORS.TOP_FIVE_CHART
+      color: COLORS.TOP_FIVE_CHART,
     },
   ];
   //last month bar chart data
   const barChartItemsLastMonth = [
     {
       data: get(chartDetails, "highValues"),
-      color: COLORS.LAST_MONTH_CHART_HIGH
+      color: COLORS.LAST_MONTH_CHART_HIGH,
     },
     {
       data: get(chartDetails, "lowValues"),
-      color: COLORS.LAST_MONTH_CHART_LOW
+      color: COLORS.LAST_MONTH_CHART_LOW,
     },
   ];
 
   //Grid Item component
   const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? COLORS.DASHBOARD_GRID_ITEM_DARK : COLORS.DASHBOARD_GRID_ITEM_LIGHT,
+    backgroundColor:
+      theme.palette.mode === "dark"
+        ? COLORS.DASHBOARD_GRID_ITEM_DARK
+        : COLORS.DASHBOARD_GRID_ITEM_LIGHT,
     ...theme.typography.body1,
     padding: theme.spacing(0.5),
     margin: isMobileView ? theme.spacing(1) : theme.spacing(0),
@@ -88,15 +106,21 @@ const Dashboard = (props) => {
     );
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} 
-      sx={{ backgroundColor: props.isDarkMode ? COLORS.BLACK : COLORS.MAIN_CONTENT_BACKGROUND }}
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          backgroundColor: props.isDarkMode
+            ? COLORS.BLACK
+            : COLORS.MAIN_CONTENT_BACKGROUND,
+        }}
       >
         {/* 
           for xs devices grid items will be alligned colomn wise,
           for md screens grid items items lay on normal way
          */}
         <Grid item xs={12} md={8}>
-          <Item sx={{backgroundColor: COLORS.WELCOME_BANNER}}>
+          <Item sx={{ backgroundColor: COLORS.WELCOME_BANNER }}>
             <WelcomeDashboardComponent
               title={WELCOME_TITLE}
               subTitle={WELCOME_SUBTITLE}
@@ -141,7 +165,7 @@ const Dashboard = (props) => {
                 value={get(chartDetails, "maxHigh")}
                 sinceYesterday={LINE_CHART_SINCE_YESTERDAY_TEXT}
                 lineChartData={get(chartDetails, "highValues")}
-                lineChartColor = {COLORS.LINE_CHART_HIGH}
+                lineChartColor={COLORS.LINE_CHART_HIGH}
                 cardStyles={{}}
                 cardContentStyles={cardContentStylesLineCharts}
               />
@@ -155,7 +179,7 @@ const Dashboard = (props) => {
               value={get(chartDetails, "maxLow")}
               sinceYesterday={LINE_CHART_SINCE_YESTERDAY_TEXT}
               lineChartData={get(chartDetails, "lowValues")}
-              lineChartColor = {COLORS.LINE_CHART_LOW}
+              lineChartColor={COLORS.LINE_CHART_LOW}
               cardStyles={{}}
               cardContentStyles={cardContentStylesLineCharts}
             />
@@ -168,13 +192,13 @@ const Dashboard = (props) => {
               value={get(chartDetails, "maxOpen")}
               sinceYesterday={LINE_CHART_SINCE_YESTERDAY_TEXT}
               lineChartData={get(chartDetails, "openValues")}
-              lineChartColor = {COLORS.LINE_CHART_OPEN}
+              lineChartColor={COLORS.LINE_CHART_OPEN}
               cardStyles={{}}
               cardContentStyles={cardContentStylesLineCharts}
             />
           </Item>
         </Grid>
-        <Grid item  xs={12} md={8}>
+        <Grid item xs={12} md={8}>
           <Item>
             <BarChartComponent
               title="Last Month"
@@ -211,6 +235,20 @@ const Dashboard = (props) => {
             />
           </Item>
         </Grid>
+        {isMobileView && (
+          <Grid item xs={12}>
+            <Item>
+              <ThemeToggleButton
+                isDarkMode={props.isDarkMode}
+                handleThemeToggle={props.handleThemeToggle}
+                boxStyles={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              />
+            </Item>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );

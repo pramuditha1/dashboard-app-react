@@ -62,7 +62,7 @@ const App = (props) => {
             >
               <Toolbar />
               <Routes>
-                <Route exact path="/dashboard" element={<Dashboard isDarkMode={isDarkMode}/>} />
+                <Route exact path="/dashboard" element={<Dashboard isDarkMode={isDarkMode} handleThemeToggle={handleThemeToggle}/>} />
                 <Route exact path="/orders" element={<Orders />} />
                 <Route exact path="/account" element={<Account />} />
                 <Route exact path="/settings" element={<Settings />} />
