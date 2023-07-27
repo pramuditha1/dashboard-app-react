@@ -1,11 +1,15 @@
-# Getting Started with Create React App
+# Getting Started with Dashboard app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+libraries/ frameworks used - react, redux dev tools, 
+ui framework - material ui, 
+utility - axios, moment, react-dom, lodash, js-cookies, 
+charts - mui/x-charts, recharts
 
-## Available Scripts
+## Live demo [https://nvidia-stock-data.netlify.app]
+## Running the project
 
-In the project directory, you can run:
-
+Clone the project in your local machine and run the following command
+### `npm install`
 ### `npm start`
 
 Runs the app in the development mode.\
@@ -21,50 +25,104 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Note: project structure !**
+### components -> UI
+Reusable UI components such as button, image, spinner, Search Bar, text box contains in this folder
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+components folder contains all the chart elements that are used in dashboard
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### containers
+contains all the pages such as dashbaord, login, settings, account, etc..
 
-### `npm run eject`
+### store
+redux store and reducers
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
+### utils
+constants and localization values, util functions and custom hooks(isMobileView)
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Note: How login works
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Accessing a dummy login api provided from dummyjson.com and it returns a session token
 
-### Code Splitting
+API curl is as below...
+curl 'https://dummyjson.com/auth/login' \
+  -H 'authority: dummyjson.com' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -H 'dnt: 1' \
+  -H 'origin: http://localhost:3000' \
+  -H 'pragma: no-cache' \
+  -H 'referer: http://localhost:3000/' \
+  -H 'sec-ch-ua: "Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: cross-site' \
+  -H 'sec-gpc: 1' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36' \
+  --data-raw '{"username":"kminchelle","password":"0lelplR"}' \
+  --compressed
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  in the login form default username and passwords are provided by api are saved.
+  after successfull login user will be redirected to the dashboard page
 
-### Analyzing the Bundle Size
+  #### if you clear cache and refresh page you will be redirected to the login
+  #### if you change url to dashbard without login you will see same login page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Note: How redux store persistace kept
+When user logged into the dashboard auth data and other chart data are stored in redux store. but if page refresh store gets reset.
+to avoid this behaviour persistor added by using redux-persist and redux store stored in the local storage.
 
-### Making a Progressive Web App
+### Note: Loading dashboard in web view and mobile view
+In app.js you can see Router and page compoenents(Headers, LeftNav, Routes with containers)
+Header and left nav renders conditionaly is the screen is mobile view.
+only if moblie view Mobile header and menu icon shows
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Note: Dashboard apis and charts and store, select data in components
+I used the stock NVDA, so every data on dashboard are related to this stock
 
-### Advanced Configuration
+on dashboard loading following api dispatches and take 2 parameters(current date and one month back date)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+curl 'https://api.polygon.io/v2/aggs/ticker/NVDA/range/1/day/{month-back-date}/{today-date}?apiKey=oqwsl9C0odCpad3e108FfNm79IgukZia' \
+  -H 'authority: api.polygon.io' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cache-control: no-cache' \
+  -H 'dnt: 1' \
+  -H 'origin: http://localhost:3000' \
+  -H 'pragma: no-cache' \
+  -H 'referer: http://localhost:3000/' \
+  -H 'sec-ch-ua: "Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: cross-site' \
+  -H 'sec-gpc: 1' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36' \
+  --compressed
 
-### Deployment
+it stores charts data in redux store.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+to select store data i am using selectors provided by redux toolkit library
+## selectOpenHighValues()
+this functions in chartDataReducer will return all the dashboard data related to the charts
 
-### `npm run build` fails to minify
+#### highValues - high values array for the stock
+#### lowValues - low values array for the stock
+#### openValues - open values array for the stock 
+#### topFiveHighValues - top five high values of the stock
+#### maxHigh - max high value
+#### maxLow - max low value
+#### maxOpen - max open value
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Note: Dark mode
+using mui dark theme
+
+In web view you can see dark mode button in left nav
+In mobile view you can see dark mode button in the bottom of the dashboard
