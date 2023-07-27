@@ -10,14 +10,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import userImage from "../../assets/images/user.png";
 import { COLORS, SEARCH } from "../../utils/Constants";
-import Search from "../../components/UI/Search";
-import SearchIconWrapper from "../../components/UI/SearchIconWrapper";
-import StyledInputBase from "../../components/UI/StyledInputBase";
+import Search from "../UI/Search";
+import SearchIconWrapper from "../UI/SearchIconWrapper";
+import StyledInputBase from "../UI/StyledInputBase";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../store/slices/authReducer";
 import { get } from "lodash";
 import useMobileView from "../../utils/helper";
-import headerMainImage from '../../assets/images/nvdia.png';
 
 /*
 Main header component. used mui appBar component
@@ -36,7 +35,7 @@ const MainHeader = (props) => {
   const isLoggedIn = props.isLoggedIn;
   const menuId = "primary-search-account-menu";
 
-  const drawerWidth = isMobileView ? 50 : 240;
+  const drawerWidth = isMobileView ? 0 : 240;
 
   return (
     <>
@@ -52,30 +51,27 @@ const MainHeader = (props) => {
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>
             {isLoggedIn && (
-              <>
-              <Search sx={{maxWidth: "300px", minWidth: "150px", display: { xs: "none", sm: "flex" }}}>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder={SEARCH}
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
-              <Toolbar sx={{justifyContent: "space-around", display: { xs: "flex", sm: "none" }}}>
-              <img
-                src={headerMainImage}
-                alt="profile"
-                style={{ height: '50px', width: 'auto' }}
-              />
-            </Toolbar>
-            </>
+                <Search
+                  sx={{
+                    maxWidth: "300px",
+                    minWidth: "150px",
+                    display: { xs: "none", sm: "flex" },
+                  }}
+                >
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder={SEARCH}
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
             )}
           </Box>
           {isLoggedIn && (
             <Box
               sx={{
-                display: "flex" ,
+                display: "flex",
                 color: isDarkMode
                   ? COLORS.HEADER_USER_DETAILS_DARK
                   : COLORS.HEADER_USER_DETAILS_LIGHT,
@@ -97,9 +93,11 @@ const MainHeader = (props) => {
                 variant="small"
                 noWrap
                 component="div"
-                sx={{ display: { xs: "none", sm: "flex"}, paddingTop: "12px" }}
+                sx={{ display: { xs: "none", sm: "flex" }, paddingTop: "12px" }}
               >
-                {get(userDetails, "firstName") + " " + get(userDetails, "lastName")}
+                {get(userDetails, "firstName") +
+                  " " +
+                  get(userDetails, "lastName")}
               </Typography>
               <IconButton
                 size="large"

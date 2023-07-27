@@ -11,9 +11,9 @@ import { useSelector } from "react-redux";
 import { get } from "lodash";
 import Cookies from "js-cookie";
 import { CssBaseline } from '@mui/material';
-import LeftNavBar from "./containers/LeftNavBar";
+import LeftNavBar from "./components/LeftNavBar";
 import Login from "./containers/Login";
-import MainHeader from "./containers/MainHeader";
+import MainHeader from "./components/MainHeader";
 import Dashboard from "./containers/Dashboard";
 import Orders from "./containers/Orders";
 import Account from "./containers/Account";
@@ -22,6 +22,7 @@ import Chat from "./containers/Chat";
 import FAQ from "./containers/Faq";
 import { COLORS } from './utils/Constants';
 import useMobileView from './utils/helper';
+import MobileHeader from './components/MobileHeader';
 
 const App = (props) => {
   const loggedUserDetails = useSelector((state) => state.userInfo.data);
@@ -39,7 +40,6 @@ const App = (props) => {
     setIsDarkMode((prevMode) => !prevMode);
   };
 
-  console.log(isMobileView, "====== mobile view");
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
       <CssBaseline />
@@ -47,11 +47,18 @@ const App = (props) => {
         {!isLoggedIn && <Login />}
         {isLoggedIn && (
           <Box sx={{ display: "flex" }}>
-            <MainHeader isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}/>
+            {
+              // mobile view header - contains menu button, logo and user profile image
+              isMobileView && <MobileHeader isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}/>
+            }
+            {
+              // web view header - contains search and all user profile details
+              !isMobileView && <MainHeader isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}/>
+            }
             <LeftNavBar isDarkMode={isDarkMode} handleThemeToggle={handleThemeToggle} />
             <Box
               component="main"
-              sx={{ flexGrow: 1, backgroundColor: isDarkMode ? COLORS.BLACK : COLORS.MAIN_CONTENT_BACKGROUND, p: 3 }}
+              sx={{ flexGrow: 1, backgroundColor: isDarkMode ? COLORS.BLACK : COLORS.MAIN_CONTENT_BACKGROUND, p: isMobileView ? 0 : 3 }}
             >
               <Toolbar />
               <Routes>
